@@ -57,12 +57,10 @@ def addElevation(file):
 #url = "http://158.160.79.188:8000/GetAll"
 #response = requests.get(url)
 #answer = json.loads(response.text)
-answer
+answer = pd.read_json("Data.json")
 
-
-
-
-exit(0);
+#print(answer.head())
+exit(0)
 
 #fill()
 
@@ -71,11 +69,11 @@ file = pd.read_csv("Data.csv")
 if 'elevation' not in file.columns and 0:
     file = addElevation(file)
 
-file['totalAcceleration'] = (file['linearAccelerationX'] ** 2 + file['linearAccelerationY'] ** 2 + file['linearAccelerationZ'] ** 2) ** 0.5
-file['totalAngleSpeed'] = (file['angleSpeedX']**2 + file['angleSpeedY']**2 + file['angleSpeedZ']**2) ** 0.5
-file['time'] = file['time'] - file['time'][0]
+#file['totalAcceleration'] = (file['linearAccelerationX'] ** 2 + file['linearAccelerationY'] ** 2 + file['linearAccelerationZ'] ** 2) ** 0.5
+#file['totalAngleSpeed'] = (file['angleSpeedX']**2 + file['angleSpeedY']**2 + file['angleSpeedZ']**2) ** 0.5
+#file['time'] = file['time'] - file['time'][0]
 
 
 
-file.plot('time', ['elevation', 'totalAcceleration', 'totalAngleSpeed'], subplots=True)
+file.plot('time', ['elevation'], subplots=True)
 plt.show()
