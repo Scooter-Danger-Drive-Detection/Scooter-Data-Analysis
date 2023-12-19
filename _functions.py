@@ -1,13 +1,13 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-import requests
 import json
+import numpy as np
+import pandas as pd
+import matplotlib as plt
+import requests
 
 chunk_size = 100
 
 
-def fill():
+def fill_random():
     sz = 100
     df = pd.DataFrame({
         'id': range(1, sz+1),
@@ -39,10 +39,11 @@ def fill():
 
     df.to_csv('data.csv', index=False)
 
-def addElevation(file):
+
+def add_elevation(data):
     elev = []
-    for first_elem in range(0, len(file), chunk_size):
-        locations = '|'.join([f"{file['latitude'][row + first_elem]},{file['longitude'][row + first_elem]}" for row in range(min(chunk_size, len(file) - first_elem))])
+    for first_elem in range(0, len(data), chunk_size):
+        locations = '|'.join([f"{data['latitude'][row + first_elem]},{data['longitude'][row + first_elem]}" for row in range(min(chunk_size, len(data) - first_elem))])
         url = f"https://api.opentopodata.org/v1/mapzen?locations={locations}"
         response = requests.get(url)
         result = json.loads(response.text)
@@ -50,33 +51,29 @@ def addElevation(file):
             print(f"Latitude: {res['location']['lat']}, Longitude: {res['location']['lng']}, Elevation: {res['elevation']}")
         elev = elev + [res['elevation'] for res in result['results']]
     elevation_df = pd.DataFrame([{'elevation': el} for el in elev])
-    merged_df = pd.concat([file, elevation_df], axis=1)
+    merged_df = pd.concat([data, elevation_df], axis=1)
     merged_df.to_csv('Data.csv', index=False)
-    file = merged_df
-    return file
+    data = merged_df
+    return data
 
-#url = "http://158.160.79.188:8000/GetAll"
+
+url = "http://158.160.79.188:8000/GetAll"
 #response = requests.get(url)
 #answer = json.loads(response.text)
-answer
-
-
-
-
-exit(0);
+#answer
 
 #fill()
 
-file = pd.read_csv("Data.csv")
+data = pd.read_csv("Data.csv")
 
-if 'elevation' not in file.columns and 0:
-    file = addElevation(file)
+if 'elevation' not in data.columns and 0:
+    data = add_elevation(data)
 
-file['totalAcceleration'] = (file['linearAccelerationX'] ** 2 + file['linearAccelerationY'] ** 2 + file['linearAccelerationZ'] ** 2) ** 0.5
-file['totalAngleSpeed'] = (file['angleSpeedX']**2 + file['angleSpeedY']**2 + file['angleSpeedZ']**2) ** 0.5
-file['time'] = file['time'] - file['time'][0]
+data['totalAcceleration'] = (data['linearAccelerationX'] ** 2 + data['linearAccelerationY'] ** 2 + data['linearAccelerationZ'] ** 2) ** 0.5
+data['totalAngleSpeed'] = (data['angleSpeedX']**2 + data['angleSpeedY']**2 + data['angleSpeedZ']**2) ** 0.5
+data['time'] = data['time'] - data['time'][0]
 
 
 
-file.plot('time', ['elevation', 'totalAcceleration', 'totalAngleSpeed'], subplots=True)
+data.plot('time', ['elevation', 'totalAcceleration', 'totalAngleSpeed'], subplots=True)
 plt.show()
