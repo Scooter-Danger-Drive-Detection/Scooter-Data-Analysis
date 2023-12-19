@@ -5,9 +5,15 @@ class FrameBatch:
     def __init__(self, frames: list[Frame], session: Session):
         self._batch_size = len(frames)
 
-        self.average_speed = sum(frame.gps.speed for frame in frames) / len(frames)
-        self.min_speed = min(frame.gps.speed for frame in frames)
-        self.max_speed = max(frame.gps.speed for frame in frames)
+        not_null_speeds = [frame.gps.speed for frame in frames if frame.gps.speed != 0]
+        if len(not_null_speeds) == 0:
+            self.average_speed = 0
+            self.min_speed = 0
+            self.max_speed = 0
+        else:
+            self.average_speed = sum(not_null_speeds) / len(not_null_speeds)
+            self.min_speed = min(not_null_speeds)
+            self.max_speed = max(not_null_speeds)
 
         self.average_acceleration = sum(frame.accelerometer.total_acceleration for frame in frames) / len(frames)
         self.min_acceleration = min(frame.accelerometer.total_acceleration for frame in frames)
