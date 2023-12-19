@@ -54,11 +54,21 @@ def addElevation(file):
     file = merged_df
     return file
 
+#url = "http://158.160.79.188:8000/GetAll"
+#response = requests.get(url)
+#answer = json.loads(response.text)
+answer
+
+
+
+
+exit(0);
+
 #fill()
 
 file = pd.read_csv("Data.csv")
 
-if 'elevation' not in file.columns:
+if 'elevation' not in file.columns and 0:
     file = addElevation(file)
 
 file['totalAcceleration'] = (file['linearAccelerationX'] ** 2 + file['linearAccelerationY'] ** 2 + file['linearAccelerationZ'] ** 2) ** 0.5
