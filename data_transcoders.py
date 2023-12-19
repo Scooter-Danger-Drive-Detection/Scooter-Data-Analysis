@@ -19,7 +19,8 @@ def load_frames_by_url(url: str) -> tuple[dict[list[Frame]], dict[Session]]:
     sessions_by_session_id = dict()
     for session_data in data.get("Sessions"):
         session = session_json_to_model(session_data)
-        sessions_by_session_id[session.session_db_id] = sessions_by_session_id.get(session.session_db_id) + [session]
+        sessions_by_session_id[session.session_db_id] =\
+            sessions_by_session_id.get(session.session_db_id, list()) + [session]
 
     return frames_by_session_id, sessions_by_session_id
 
