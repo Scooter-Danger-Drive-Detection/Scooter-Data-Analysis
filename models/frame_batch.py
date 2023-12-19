@@ -1,8 +1,8 @@
-from models import Frame
+from models import Frame, Session, SafeRideMode
 
 
 class FrameBatch:
-    def __init__(self, frames: list[Frame]):
+    def __init__(self, frames: list[Frame], session: Session):
         self.batch_size = len(frames)
 
         self.average_speed = sum(frame.gps.speed for frame in frames) / len(frames)
@@ -18,3 +18,5 @@ class FrameBatch:
         self.max_angle_speed = max(frame.gyroscope.total_angle_speed for frame in frames)
 
         self.time_delta = max(frame.time for frame in frames) - min(frame.time for frame in frames)
+
+        self.ride_mode = 0 if isinstance(session.ride_mode, SafeRideMode) else 1
