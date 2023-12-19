@@ -3,7 +3,7 @@ from models import Frame, Session, SafeRideMode
 
 class FrameBatch:
     def __init__(self, frames: list[Frame], session: Session):
-        self.batch_size = len(frames)
+        self._batch_size = len(frames)
 
         self.average_speed = sum(frame.gps.speed for frame in frames) / len(frames)
         self.min_speed = min(frame.gps.speed for frame in frames)

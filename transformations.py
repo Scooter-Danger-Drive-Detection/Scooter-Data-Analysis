@@ -65,5 +65,6 @@ def frame_batches_to_dataframe(batches: list[FrameBatch]):
     frame_batches_dict = dict()
     for batch in batches:
         for attribute, value in batch.__dict__.items():
-            frame_batches_dict[attribute] = frame_batches_dict.get(attribute, list()) + [value]
+            if attribute[0] != '_':
+                frame_batches_dict[attribute] = frame_batches_dict.get(attribute, list()) + [value]
     return pd.DataFrame(frame_batches_dict)
