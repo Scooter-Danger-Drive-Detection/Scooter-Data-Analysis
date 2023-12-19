@@ -54,9 +54,12 @@ def load_frames_by_url(url: str) -> tuple[dict[list[Frame]], dict[Session]]:
     return frames_by_session_id, sessions_by_session_id
 
 
-def unite_frames_to_frame_batches(frames: list[Frame], session: Session, batch_size: int) -> list[FrameBatch]:
+def unite_frames_to_frame_batches(frames: list[Frame], session: Session, batch_size: int,
+                                  step=None) -> list[FrameBatch]:
+    if step is None:
+        step = batch_size
     batches = list()
-    for i in range(0, len(frames), batch_size):
+    for i in range(0, len(frames), step):
         batches.append(FrameBatch(frames[i:i+batch_size], session))
     return batches
 
